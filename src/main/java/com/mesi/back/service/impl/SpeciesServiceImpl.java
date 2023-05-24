@@ -6,6 +6,8 @@ import com.mesi.back.service.SpeciesService;
 import com.mesi.back.service.mapper.SpeciesMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,11 @@ public class SpeciesServiceImpl implements SpeciesService {
     private SpeciesMapper speciesMapper;
 
     @Override
-    public List<SpeciesDto> findAll() {
-        return speciesRepository.findAll().stream().map(species -> speciesMapper.speciesDto(species)).collect(toList());
+    public ResponseEntity<List<SpeciesDto>> findAll() {
+        List<SpeciesDto> speciesDtoList =  speciesRepository.findAll().stream().map(species -> speciesMapper.speciesDto(species)).collect(toList());
+        if(speciesDtoList==null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(speciesDtoList,HttpStatus.OK);
     }
 }

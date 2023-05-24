@@ -6,6 +6,9 @@ import com.mesi.back.service.OccurrenceService;
 import com.mesi.back.service.mapper.OccurrenceMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +25,11 @@ public class OccurrenceServiceImpl implements OccurrenceService {
     private OccurrenceMapper occurrenceMapper;
 
     @Override
-    public List<OccurrenceDto> findAll() {
-        return occurrenceRepository.findAll().stream().map(occurrence -> occurrenceMapper.occurrenceDto(occurrence)).collect(toList());
+    public ResponseEntity<List<OccurrenceDto>> findAll() {
+        List<OccurrenceDto> occurrenceDtoList =  occurrenceRepository.findAll().stream().map(occurrence -> occurrenceMapper.occurrenceDto(occurrence)).collect(toList());
+        if(occurrenceDtoList==null){
+           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return  new ResponseEntity<>(occurrenceDtoList,HttpStatus.OK);
     }
 }
