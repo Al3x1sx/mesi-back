@@ -10,4 +10,6 @@ public class OccurrenceMapper {
     public OccurrenceDto occurrenceDto(Occurrence occurrence) {
         return new OccurrenceDto(occurrence.getId(), occurrence.getLongitude(), occurrence.getLatitude());
     }
+
+
 }
